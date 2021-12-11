@@ -17,18 +17,18 @@ import (
 	"github.com/gobuffalo/meta"
 )
 
-//Plugins fixes the plugin configuration of the project by
-//manipulating the plugins .toml file.
+// Plugins fixes the plugin configuration of the project by
+// manipulating the plugins .toml file.
 type Plugins struct{}
 
-//CleanCache cleans the plugins cache folder by removing it
+// CleanCache cleans the plugins cache folder by removing it
 func (pf Plugins) CleanCache(r *Runner) error {
 	fmt.Println("~~~ Cleaning plugins cache ~~~")
 	os.RemoveAll(plugins.CachePath)
 	return nil
 }
 
-//Reinstall installs latest versions of the plugins
+// Reinstall installs latest versions of the plugins
 func (pf Plugins) Reinstall(r *Runner) error {
 	plugs, err := plugdeps.List(r.App)
 	if err != nil && !errors.Is(err, plugdeps.ErrMissingConfig) {
@@ -50,7 +50,7 @@ func (pf Plugins) Reinstall(r *Runner) error {
 	return run.Run()
 }
 
-//RemoveOld removes old and deprecated plugins
+// RemoveOld removes old and deprecated plugins
 func (pf Plugins) RemoveOld(r *Runner) error {
 	fmt.Println("~~~ Removing old plugins ~~~")
 
