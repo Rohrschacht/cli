@@ -17,6 +17,11 @@ import (
 	"github.com/gobuffalo/meta"
 )
 
+var oldPlugins = []string{
+	"github.com/gobuffalo/buffalo-pop",
+	"github.com/gobuffalo/buffalo-pop/v2",
+}
+
 // CleanPluginCache cleans the plugins cache folder by removing it
 func CleanPluginCache(opts *Options) ([]string, error) {
 	fmt.Println("~~~ Cleaning plugins cache ~~~")
@@ -57,14 +62,16 @@ func RemoveOldPlugins(opts *Options) ([]string, error) {
 		return nil, err
 	}
 
-	a := strings.TrimSpace("github.com/gobuffalo/buffalo-pop")
-	bin := path.Base(a)
-	plugs.Remove(plugdeps.Plugin{
-		Binary: bin,
-		GoGet:  a,
-	})
+	for _, p := range oldPlugins {
+		a := strings.TrimSpace(p)
+		bin := path.Base(a)
+		plugs.Remove(plugdeps.Plugin{
+			Binary: bin,
+			GoGet:  a,
+		})
 
-	fmt.Println("~~~ Removing github.com/gobuffalo/buffalo-pop plugin ~~~")
-	run.WithRun(cmdPlugins.NewEncodePluginsRunner(app, plugs))
+		fmt.Println("~~~ Removing", p, "plugin ~~~")
+		run.WithRun(cmdPlugins.NewEncodePluginsRunner(app, plugs))
+	}
 	return nil, run.Run()
 }
